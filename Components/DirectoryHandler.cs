@@ -2,7 +2,7 @@
 using System.IO;
 using EasyLogger;
 
-namespace ReRead
+namespace ReRead.Components
 {
     class DirectoryHandler
     {

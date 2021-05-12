@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using EasyLogger;
 
-namespace ReRead
+namespace ReRead.Components
 {
     class InputHandler
     {

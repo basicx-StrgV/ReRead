@@ -1,7 +1,7 @@
 ﻿using System;
 using EasyLogger;
 
-namespace ReRead
+namespace ReRead.Components
 {
     class MessagePrinter
     {

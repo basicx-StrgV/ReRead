@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using EasyLogger;
 
-namespace ReRead
+namespace ReRead.Components
 {
     class FileHandler
     {
