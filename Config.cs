@@ -1,4 +1,6 @@
-﻿namespace ReRead
+﻿using System;
+
+namespace ReRead
 {
     class Config
     {
@@ -9,5 +11,10 @@
         public string programFolder { get; } = "\\ReRead\\"; // "/runningDirectory/ReRead/"
         public string inputFolder { get; } = "\\Input\\"; // "/runningDirectory/ReRead/Input/"
         public string outputFolder { get; } = "\\Output\\"; // "/runningDirectory/ReRead/Output/"
+
+        public Config()
+        {
+            runningDirectory = Environment.CurrentDirectory;
+        }
     }
 }

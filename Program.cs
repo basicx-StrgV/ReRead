@@ -6,8 +6,8 @@ namespace ReRead
 {
     class Program
     {
-        private Config config = new Config();
-        private Logger logger = new Logger();
+        static private Config config = new Config();
+        private Logger logger = new Logger(LogFileType.log, "ReRead_Log", "Logs", config.runningDirectory + config.programFolder);
 
         private FileEditor fileEditor;
         private DirectoryHandler directoryHandler;
@@ -28,12 +28,6 @@ namespace ReRead
 
         private void initialize()
         {
-            //Set the directory in witch the program runs
-            config.runningDirectory = Environment.CurrentDirectory;
-
-            //Configure the logger
-            configureLogger();
-
             //Create objects of every program component
             fileEditor = new FileEditor(logger);
             inputHandler = new InputHandler(logger);
@@ -70,10 +64,6 @@ namespace ReRead
 
                 //Get a list of every file in the 'ReRead_Input' directory
                 List<string> files = fileHandler.getFileList();
-                if(files.Count == 0)
-                {
-                    files.Add("");
-                }
 
                 //Open thefile select menu and save the selection to the input string
                 string input = inputHandler.fileSelectMenu(files);
@@ -156,12 +146,6 @@ namespace ReRead
                     return;
                 }
             }
-        }
-
-        private void configureLogger()
-        {
-            logger.setCustomLogDirectoryPath(config.runningDirectory + config.programFolder);
-            logger.setCustomLogDirectoryName("Logs");
         }
     }
 }
