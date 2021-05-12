@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ReRead
+﻿namespace ReRead
 {
     class Config
     {
+        //Path of the program
         public string runningDirectory { get; set; }
-        public string inputFolder { get; } = "\\ReRead_Input\\";
-        public string outputFolder { get; } = "\\ReRead_Output\\";
+        
+        //Names of different folders
+        public string programFolder { get; } = "\\ReRead\\"; // "/runningDirectory/ReRead/"
+        public string inputFolder { get; } = "\\Input\\"; // "/runningDirectory/ReRead/Input/"
+        public string outputFolder { get; } = "\\Output\\"; // "/runningDirectory/ReRead/Output/"
     }
 }

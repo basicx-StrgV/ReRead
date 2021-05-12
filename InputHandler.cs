@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using EasyLogger;
 
 namespace ReRead
 {
     class InputHandler
     {
+        Logger logger;
+
+        public InputHandler(Logger logger)
+        {
+            this.logger = logger;
+        }
+
         public string fileSelectMenu(List<string> fileList)
         {
             try
@@ -93,8 +100,32 @@ namespace ReRead
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+                logger.write(e.Message);
                 return "";
+            }
+        }
+    
+        public void pressEnterToContinue()
+        {
+            try
+            {
+                //Display message
+                Console.WriteLine("Press ENTER to continue");
+
+                //Only continue if enter gets pressed
+                while (true)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+
+                    if (key.Key == ConsoleKey.Enter)
+                    {
+                        return;
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                logger.write(e.Message);
             }
         }
     }

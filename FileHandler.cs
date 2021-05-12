@@ -2,55 +2,60 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using EasyLogger;
 
 namespace ReRead
 {
     class FileHandler
     {
         Config config;
-        public FileHandler(Config config)
+        Logger logger;
+
+        public FileHandler(Config config, Logger logger)
         {
             this.config = config;
+            this.logger = logger;
         }
 
         public List<string> getFileList()
         {
             try
             {
-                List<string> files = Directory.GetFiles(config.runningDirectory + config.inputFolder).ToList();
-                return files;
+                //Returns a list of every file in the 'Input' directory
+                return Directory.GetFiles(config.runningDirectory + config.programFolder + config.inputFolder).ToList();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Console.WriteLine(e);
+                logger.write(e.Message);
                 List<string> emptyList = new List<string>();
                 return emptyList;
             }
         }
 
-        public string readFile(string input)
+        public string readFile(string file)
         {
             try
             {
-                return File.ReadAllText(config.runningDirectory + config.inputFolder + input);
+                //Return the content of the file as a string
+                return File.ReadAllText(file);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Console.WriteLine(e);
+                logger.write(e.Message);
                 return "";
             }
         }
 
-        public void saveFile(List<string> file, string fileName)
+        public void saveFile(string fileName, List<string> fileContent)
         {
             try
             {
-                File.WriteAllLines(config.runningDirectory + config.outputFolder + fileName, file);
+                //Write the new file in the 'Output' directory
+                File.WriteAllLines(config.runningDirectory + config.programFolder + config.outputFolder + "ReRead_" + fileName, fileContent);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                logger.write(e.Message);
             }
         }
     }

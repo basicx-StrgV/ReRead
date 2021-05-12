@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using EasyLogger;
 
 namespace ReRead
 {
     class Program
     {
-        Config config = new Config();
+        private Config config = new Config();
+        private Logger logger = new Logger();
 
-        FileEditor fileEditor;
-        DirectoryHandler directoryHandler;
-        FileHandler fileHandler;
-        InputHandler inputHandler;
+        private FileEditor fileEditor;
+        private DirectoryHandler directoryHandler;
+        private FileHandler fileHandler;
+        private InputHandler inputHandler;
+        private MessagePrinter messagePrinter;
 
         static void Main(string[] args)
         {
@@ -22,44 +24,49 @@ namespace ReRead
         {
             initialize();
             startup();
-            run();
         }
 
         private void initialize()
         {
+            //Set the directory in witch the program runs
             config.runningDirectory = Environment.CurrentDirectory;
-            
-            fileEditor = new FileEditor();
-            inputHandler = new InputHandler();
-            directoryHandler = new DirectoryHandler(config);
-            fileHandler = new FileHandler(config);
-        }
 
-        private void startup()
-        {
-            directoryHandler.createInputDir();
-            directoryHandler.createOutputDir();
+            //Configure the logger
+            configureLogger();
 
+            //Create objects of every program component
+            fileEditor = new FileEditor(logger);
+            inputHandler = new InputHandler(logger);
+            messagePrinter = new MessagePrinter(logger);
+            directoryHandler = new DirectoryHandler(config, logger);
+            fileHandler = new FileHandler(config, logger);
+
+            //Configure the console window
             Console.Title = "ReRead";
             Console.CursorVisible = false;
         }
 
+        private void startup()
+        {
+            //Create every directory needed by the program
+            directoryHandler.createProgramMainDir();
+            directoryHandler.createInputDir();
+            directoryHandler.createOutputDir();
+
+            //First message
+            clearWindow();
+            messagePrinter.startMessage();
+            inputHandler.pressEnterToContinue();
+
+            //Start main process
+            run();
+        }
+
         private void run()
         {
-            renderWindow();
-
-            //First massage
-            Console.BackgroundColor = ConsoleColor.Gray;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine("\nPut your file/s in the 'ReRead_Input' folder an press ENTER to continue\n");
-            Console.ResetColor();
-
-            Console.ReadKey(true);
-
-            //Main process
             while (true)
             {
-                renderWindow();
+                clearWindow();
 
                 //Get a list of every file in the 'ReRead_Input' directory
                 List<string> files = fileHandler.getFileList();
@@ -71,46 +78,51 @@ namespace ReRead
                 //Open thefile select menu and save the selection to the input string
                 string input = inputHandler.fileSelectMenu(files);
 
-                if (input == "EXIT")
+                //Process input
+                if (input.Equals("EXIT"))
                 {
-                    renderWindow();
+                    //Open the exit menu if the user selected 'EXIT'
                     exit();
                 }
-                if (input == "RELOAD")
+                else if (input.Equals("RELOAD"))
                 {
                     //Placeholder
                 }
-                else if(input == "")
+                else if (input.Equals(""))
                 {
-                    renderWindow();
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("\nERROR\n");
-                    Console.ResetColor();
-                    Console.WriteLine("Press ENTER to continue");
-                    Console.ReadKey(true);
+                    //Display an error if somthing went wrong
+                    clearWindow();
+                    messagePrinter.error();
+                    inputHandler.pressEnterToContinue();
                 }
-                else
+                else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals(""))
                 {
-                    string file = "";
-                    file = fileHandler.readFile(input);
-                    
-                    if(file == "")
+                    //If a file is selected
+                    //Read the content of the selected file
+                    string fileContent = fileHandler.readFile(input);
+
+                    //Read the filename from the selected file path
+                    string fileName = input.Split('\\')[input.Split('\\').Length - 1];
+
+                    if (fileContent == "")
                     {
-                        Console.WriteLine("\n The file is empty or could not be found!\n");
+                        //If somthing went wrong while reading the file or if the file is empty, display an error
+                        clearWindow();
+                        messagePrinter.fileError();
+                        inputHandler.pressEnterToContinue();
                     }
                     else {
-                        string currentFileName = input;
+                        //Edit the selected file content
+                        List<string>editedFile = fileEditor.edit(fileContent);
 
-                        List<string>editedFile = fileEditor.splitToLines(file);
-
-                        fileHandler.saveFile(editedFile, "ReRead_" + currentFileName);
+                        //Save the new file in the 'Output' directory
+                        fileHandler.saveFile(fileName, editedFile);
                     }
                 }
             }
         }
 
-        private void renderWindow()
+        private void clearWindow()
         {
             Console.Clear();
             Console.WriteLine("______    ______               _\n" +
@@ -123,12 +135,14 @@ namespace ReRead
 
         private void exit()
         {
+            clearWindow();
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("\nAre you sure thet you want to exit?");
             Console.ResetColor();
             Console.WriteLine("Press ENTER to continue or ESC to cancel");
             
+            //Return to the main process if 'ESC' gets pressed and close the program if 'ENTER' gets pressed
             while(true)
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -142,6 +156,12 @@ namespace ReRead
                     return;
                 }
             }
+        }
+
+        private void configureLogger()
+        {
+            logger.setCustomLogDirectoryPath(config.runningDirectory + config.programFolder);
+            logger.setCustomLogDirectoryName("Logs");
         }
     }
 }

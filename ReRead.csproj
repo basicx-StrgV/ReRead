@@ -10,4 +10,8 @@
     <None Remove=".gitattributes" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\EasyLogger\EasyLogger\EasyLogger.csproj" />
+  </ItemGroup>
+
 </Project>
