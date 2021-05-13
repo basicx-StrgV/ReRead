@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ReRead.Configs;
 using EasyLogger;
 
 namespace ReRead.Components
@@ -46,17 +47,20 @@ namespace ReRead.Components
             }
         }
 
-        public void saveFile(string fileName, List<string> fileContent)
+        public bool saveFile(string fileName, string fileContent)
         {
             try
             {
-                string test = dirConfig.outputFolderPath + "ReRead_" + fileName;
                 //Write the new file in the 'Output' directory
-                File.WriteAllLines(dirConfig.outputFolderPath + "ReRead_" + fileName, fileContent);
+                File.WriteAllText(dirConfig.outputFolderPath + "ReRead_" + fileName, fileContent);
+
+                //Return true to signal that the file got saved
+                return true;
             }
             catch (Exception e)
             {
                 logger.log(e.Message);
+                return false;
             }
         }
     }

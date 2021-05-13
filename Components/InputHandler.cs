@@ -56,7 +56,8 @@ namespace ReRead.Components
                     Console.ForegroundColor = ConsoleColor.Black;
 
                     //Write the line to highlight it with the selected colors
-                    Console.Write(fileList[listIndex].Split('\\')[fileList[listIndex].Split('\\').Length - 1]);
+                    Console.Write(fileList[listIndex].Split('\\')[
+                                    fileList[listIndex].Split('\\').Length - 1]);
 
                     //Set the cursor beck to the start of the selected line
                     Console.SetCursorPosition(0, currentLine);

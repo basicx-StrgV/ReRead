@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ReRead
+﻿namespace ReRead.Configs
 {
     class DirectoryConfig
     {

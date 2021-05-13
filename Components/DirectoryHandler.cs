@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ReRead.Configs;
 using EasyLogger;
 
 namespace ReRead.Components

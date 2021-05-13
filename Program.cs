@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ReRead.Components;
+using ReRead.Configs;
 using EasyLogger;
 using EasyLogger.LoggerFile;
 using EasyLogger.LoggerDirectory;
@@ -55,7 +56,7 @@ namespace ReRead
 
             //First message
             clearWindow();
-            messagePrinter.startMessage();
+            messagePrinter.start();
             inputHandler.pressEnterToContinue();
 
             //Start main process
@@ -87,9 +88,7 @@ namespace ReRead
                 else if (input.Equals(""))
                 {
                     //Display an error if somthing went wrong
-                    clearWindow();
-                    messagePrinter.error();
-                    inputHandler.pressEnterToContinue();
+                    error(ErrorType.normal);
                 }
                 else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals(""))
                 {
@@ -97,22 +96,41 @@ namespace ReRead
                     //Read the content of the selected file
                     string fileContent = fileHandler.readFile(input);
 
-                    //Read the filename from the selected file path
-                    string fileName = input.Split('\\')[input.Split('\\').Length - 1];
+                    //Read the filename from the selected file path (Select last entry of the string array)
+                    string fileName = input.Split('\\')[
+                                            input.Split('\\').Length - 1];
 
                     if (fileContent == "")
                     {
                         //If somthing went wrong while reading the file or if the file is empty, display an error
-                        clearWindow();
-                        messagePrinter.fileError();
-                        inputHandler.pressEnterToContinue();
+                        error(ErrorType.file);
                     }
-                    else {
+                    else 
+                    {
                         //Edit the selected file content
-                        List<string>editedFile = fileEditor.edit(fileContent);
+                        string editedFile = fileEditor.edit(fileContent);
 
-                        //Save the new file in the 'Output' directory
-                        fileHandler.saveFile(fileName, editedFile);
+                        //Check new file content
+                        if(editedFile.Equals(""))
+                        {
+                            error(ErrorType.normal);
+                        }
+                        else
+                        {
+                            //Save the new file in the 'Output' directory
+                            bool saveStatus = fileHandler.saveFile(fileName, editedFile);
+                            
+                            if(saveStatus)
+                            {
+                                clearWindow();
+                                messagePrinter.done();
+                                inputHandler.pressEnterToContinue();
+                            }
+                            else
+                            {
+                                error(ErrorType.save);
+                            }
+                        }
                     }
                 }
             }
@@ -126,7 +144,8 @@ namespace ReRead
                                 "| |_/ /___| |_/ /___  __ _  __| |\n" +
                                 "|    // _ \\    // _ \\/ _` |/ _` |\n" +
                                 "| |\\ \\  __/ |\\ \\  __/ (_| | (_| |\n" +
-                                "\\_| \\_\\___\\_| \\_\\___|\\__,_|\\__,_|");
+                                "\\_| \\_\\___\\_| \\_\\___|\\__,_|\\__,_|\n" +
+                                "by basicx-StrgV");
         }
 
         private void exit()
@@ -152,6 +171,29 @@ namespace ReRead
                     return;
                 }
             }
+        }
+    
+        private void error(ErrorType errorType)
+        {
+            clearWindow();
+
+            switch(errorType)
+            {
+                case ErrorType.normal:
+                    messagePrinter.error();
+                    break;
+                case ErrorType.file:
+                    messagePrinter.fileError();
+                    break;
+                case ErrorType.save:
+                    messagePrinter.saveError();
+                    break;
+                default:
+                    messagePrinter.error();
+                    break;
+            }
+           
+            inputHandler.pressEnterToContinue();
         }
     }
 }
