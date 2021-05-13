@@ -6,7 +6,7 @@ namespace ReRead.Components
 {
     class FileEditor
     {
-        Logger logger;
+        private Logger logger;
 
         public FileEditor(Logger logger)
         {

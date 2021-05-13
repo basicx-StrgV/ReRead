@@ -6,7 +6,7 @@ namespace ReRead.Components
 {
     class InputHandler
     {
-        Logger logger;
+        private Logger logger;
 
         public InputHandler(Logger logger)
         {
@@ -100,7 +100,7 @@ namespace ReRead.Components
             }
             catch(Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
                 return "";
             }
         }
@@ -125,7 +125,7 @@ namespace ReRead.Components
             }
             catch(Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
     }

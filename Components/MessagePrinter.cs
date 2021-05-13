@@ -5,7 +5,7 @@ namespace ReRead.Components
 {
     class MessagePrinter
     {
-        Logger logger;
+        private Logger logger;
         
         public MessagePrinter(Logger logger)
         {
@@ -23,7 +23,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
 
@@ -38,7 +38,7 @@ namespace ReRead.Components
             }
             catch(Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
 
@@ -53,7 +53,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
     }

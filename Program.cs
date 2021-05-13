@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using ReRead.Components;
 using EasyLogger;
+using EasyLogger.LoggerFile;
+using EasyLogger.LoggerDirectory;
 
 namespace ReRead
 {
     class Program
     {
-        static private Config config = new Config();
-        private Logger logger = new Logger(LogFileType.log, "ReRead_Log", "Logs", config.runningDirectory + config.programFolder);
+        static private DirectoryConfig dirConfig = new DirectoryConfig(Environment.CurrentDirectory);
+
+        private Logger logger = new Logger(
+            new LogFile("ReRead", LogFileType.log), 
+            new LogDirectory(dirConfig.programFolderPath, "Logs"));
 
         private FileEditor fileEditor;
         private DirectoryHandler directoryHandler;
@@ -33,8 +38,8 @@ namespace ReRead
             fileEditor = new FileEditor(logger);
             inputHandler = new InputHandler(logger);
             messagePrinter = new MessagePrinter(logger);
-            directoryHandler = new DirectoryHandler(config, logger);
-            fileHandler = new FileHandler(config, logger);
+            directoryHandler = new DirectoryHandler(dirConfig, logger);
+            fileHandler = new FileHandler(dirConfig, logger);
 
             //Configure the console window
             Console.Title = "ReRead";

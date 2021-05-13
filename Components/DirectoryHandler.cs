@@ -6,12 +6,12 @@ namespace ReRead.Components
 {
     class DirectoryHandler
     {
-        Config config;
-        Logger logger;
+        private DirectoryConfig dirConfig;
+        private Logger logger;
 
-        public DirectoryHandler(Config config, Logger logger)
+        public DirectoryHandler(DirectoryConfig directoryConfig, Logger logger)
         {
-            this.config = config;
+            this.dirConfig = directoryConfig;
             this.logger = logger;
         }
 
@@ -20,11 +20,11 @@ namespace ReRead.Components
             try
             {
                 //Create the program folder (ReRead): "path_of_the_program/ReRead/"
-                Directory.CreateDirectory(config.runningDirectory + config.programFolder);
+                Directory.CreateDirectory(dirConfig.programFolderPath);
             }
             catch (Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
 
@@ -33,11 +33,11 @@ namespace ReRead.Components
             try 
             {
                 //Create the 'Input' folder: "path_of_the_program/ReRead/Input/"
-                Directory.CreateDirectory(config.runningDirectory + config.programFolder + config.inputFolder);
+                Directory.CreateDirectory(dirConfig.inputFolderPath);
             }
             catch(Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
 
@@ -46,11 +46,11 @@ namespace ReRead.Components
             try
             {
                 //Create the 'Output' folder: "path_of_the_program/ReRead/Output/"
-                Directory.CreateDirectory(config.runningDirectory + config.programFolder + config.outputFolder);
+                Directory.CreateDirectory(dirConfig.outputFolderPath);
             }
             catch (Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
     }

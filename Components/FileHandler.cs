@@ -8,12 +8,12 @@ namespace ReRead.Components
 {
     class FileHandler
     {
-        Config config;
-        Logger logger;
+        private DirectoryConfig dirConfig;
+        private Logger logger;
 
-        public FileHandler(Config config, Logger logger)
+        public FileHandler(DirectoryConfig directoryConfig, Logger logger)
         {
-            this.config = config;
+            this.dirConfig = directoryConfig;
             this.logger = logger;
         }
 
@@ -22,11 +22,11 @@ namespace ReRead.Components
             try
             {
                 //Returns a list of every file in the 'Input' directory
-                return Directory.GetFiles(config.runningDirectory + config.programFolder + config.inputFolder).ToList();
+                return Directory.GetFiles(dirConfig.inputFolderPath).ToList();
             }
             catch (Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
                 List<string> emptyList = new List<string>();
                 return emptyList;
             }
@@ -41,7 +41,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
                 return "";
             }
         }
@@ -50,12 +50,13 @@ namespace ReRead.Components
         {
             try
             {
+                string test = dirConfig.outputFolderPath + "ReRead_" + fileName;
                 //Write the new file in the 'Output' directory
-                File.WriteAllLines(config.runningDirectory + config.programFolder + config.outputFolder + "ReRead_" + fileName, fileContent);
+                File.WriteAllLines(dirConfig.outputFolderPath + "ReRead_" + fileName, fileContent);
             }
             catch (Exception e)
             {
-                logger.write(e.Message);
+                logger.log(e.Message);
             }
         }
     }
