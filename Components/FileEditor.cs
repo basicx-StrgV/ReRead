@@ -16,7 +16,8 @@ namespace ReRead.Components
 
         public string edit(string fileContent)
         {
-            string newString = defaultEdit(fileContent);
+            string preEditedFileContent = preEdit(fileContent);
+            string newString = defaultEdit(preEditedFileContent);
             return newString;
         }
 
@@ -135,6 +136,14 @@ namespace ReRead.Components
                 logger.log(e.Message);
                 return "";
             }
+        }
+    
+        private string preEdit(string fileContent)
+        {
+            //Remove white-spaces at the start and end of the string
+            string trimedFileContent = fileContent.Trim();
+
+            return trimedFileContent;
         }
     }
 }

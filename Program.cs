@@ -16,11 +16,13 @@ namespace ReRead
             new LogFile("ReRead", LogFileType.log), 
             new LogDirectory(dirConfig.programFolderPath, "Logs"));
 
+        private WindowHandler windowHandler;
         private FileEditor fileEditor;
         private DirectoryHandler directoryHandler;
         private FileHandler fileHandler;
         private InputHandler inputHandler;
         private MessagePrinter messagePrinter;
+        private ErrorHandler errorHandler;
 
         static void Main(string[] args)
         {
@@ -36,15 +38,13 @@ namespace ReRead
         private void initialize()
         {
             //Create objects of every program component
+            windowHandler = new WindowHandler(logger);
             fileEditor = new FileEditor(logger);
             inputHandler = new InputHandler(logger);
             messagePrinter = new MessagePrinter(logger);
             directoryHandler = new DirectoryHandler(dirConfig, logger);
             fileHandler = new FileHandler(dirConfig, logger);
-
-            //Configure the console window
-            Console.Title = "ReRead";
-            Console.CursorVisible = false;
+            errorHandler = new ErrorHandler(logger, windowHandler, messagePrinter, inputHandler);
         }
 
         private void startup()
@@ -55,7 +55,7 @@ namespace ReRead
             directoryHandler.createOutputDir();
 
             //First message
-            clearWindow();
+            windowHandler.clearWindow();
             messagePrinter.start();
             inputHandler.pressEnterToContinue();
 
@@ -67,7 +67,7 @@ namespace ReRead
         {
             while (true)
             {
-                clearWindow();
+                windowHandler.clearWindow();
 
                 //Get a list of every file in the 'ReRead_Input' directory
                 List<string> files = fileHandler.getFileList();
@@ -88,7 +88,7 @@ namespace ReRead
                 else if (input.Equals(""))
                 {
                     //Display an error if somthing went wrong
-                    error(ErrorType.normal);
+                    errorHandler.error(ErrorType.normal);
                 }
                 else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals(""))
                 {
@@ -103,7 +103,7 @@ namespace ReRead
                     if (fileContent == "")
                     {
                         //If somthing went wrong while reading the file or if the file is empty, display an error
-                        error(ErrorType.file);
+                        errorHandler.error(ErrorType.file);
                     }
                     else 
                     {
@@ -113,7 +113,7 @@ namespace ReRead
                         //Check new file content
                         if(editedFile.Equals(""))
                         {
-                            error(ErrorType.normal);
+                            errorHandler.error(ErrorType.normal);
                         }
                         else
                         {
@@ -122,13 +122,13 @@ namespace ReRead
                             
                             if(saveStatus)
                             {
-                                clearWindow();
+                                windowHandler.clearWindow();
                                 messagePrinter.done();
                                 inputHandler.pressEnterToContinue();
                             }
                             else
                             {
-                                error(ErrorType.save);
+                                errorHandler.error(ErrorType.save);
                             }
                         }
                     }
@@ -136,21 +136,9 @@ namespace ReRead
             }
         }
 
-        private void clearWindow()
-        {
-            Console.Clear();
-            Console.WriteLine("______    ______               _\n" +
-                                "| ___ \\   | ___ \\             | |\n" +
-                                "| |_/ /___| |_/ /___  __ _  __| |\n" +
-                                "|    // _ \\    // _ \\/ _` |/ _` |\n" +
-                                "| |\\ \\  __/ |\\ \\  __/ (_| | (_| |\n" +
-                                "\\_| \\_\\___\\_| \\_\\___|\\__,_|\\__,_|\n" +
-                                "by basicx-StrgV");
-        }
-
         private void exit()
         {
-            clearWindow();
+            windowHandler.clearWindow();
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("\nAre you sure thet you want to exit?");
@@ -171,29 +159,6 @@ namespace ReRead
                     return;
                 }
             }
-        }
-    
-        private void error(ErrorType errorType)
-        {
-            clearWindow();
-
-            switch(errorType)
-            {
-                case ErrorType.normal:
-                    messagePrinter.error();
-                    break;
-                case ErrorType.file:
-                    messagePrinter.fileError();
-                    break;
-                case ErrorType.save:
-                    messagePrinter.saveError();
-                    break;
-                default:
-                    messagePrinter.error();
-                    break;
-            }
-           
-            inputHandler.pressEnterToContinue();
         }
     }
 }
