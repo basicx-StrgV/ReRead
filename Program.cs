@@ -93,13 +93,13 @@ namespace ReRead
                     foreach (string file in files)
                     {
                         //Read the content of the file
-                        string fileContent = fileHandler.readFile(file);
+                        List<string> fileContent = fileHandler.readFile(file);
 
                         //Read the filename from the selected file path (Select last entry of the string array)
                         string fileName = file.Split('\\')[
                                                 file.Split('\\').Length - 1];
 
-                        if (fileContent == "")
+                        if (fileContent.Count == 0)
                         {
                             //If somthing went wrong, add the file to the failed list
                             failedList.Add(file);
@@ -145,13 +145,13 @@ namespace ReRead
                 {
                     //If a file is selected
                     //Read the content of the selected file
-                    string fileContent = fileHandler.readFile(input);
+                    List<string> fileContent = fileHandler.readFile(input);
 
                     //Read the filename from the selected file path (Select last entry of the string array)
                     string fileName = input.Split('\\')[
                                             input.Split('\\').Length - 1];
 
-                    if (fileContent == "")
+                    if (fileContent.Count == 0)
                     {
                         //If somthing went wrong while reading the file or if the file is empty, display an error
                         errorHandler.error(ErrorType.file);

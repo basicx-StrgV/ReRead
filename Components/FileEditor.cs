@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using BasicxLogger;
@@ -14,7 +15,7 @@ namespace ReRead.Components
             this.logger = logger;
         }
 
-        public string edit(string fileContent)
+        public string edit(List<string> fileContent)
         {
             string preEditedFileContent = preEdit(fileContent);
             string newString = defaultEdit(preEditedFileContent);
@@ -138,12 +139,78 @@ namespace ReRead.Components
             }
         }
     
-        private string preEdit(string fileContent)
+        private string preEdit(List<string> fileContent)
         {
-            //Remove white-spaces at the start and end of the string
-            string trimedFileContent = fileContent.Trim();
+            try
+            {
+                //List that will contain every line in the file but with white-spaces, \n usw removed
+                List<string> cleanList = new List<string>();
 
-            return trimedFileContent;
+                //Edits every line and adds it to the new list
+                foreach (string line in fileContent)
+                {
+                    //Remove white-spaces at the start and end of the string
+                    string trimedFileContent = line.Trim();
+
+                    //Create a string builder
+                    StringBuilder lineBuilder = new StringBuilder();
+
+                    //Create a string reader for the trimed file content
+                    StringReader fileContentReader = new StringReader(trimedFileContent);
+
+                    //bool will bes set to true if the end of the string is reached
+                    bool stringEnd = false;
+
+                    while (!stringEnd)
+                    {
+                        //Get the dezimal value of the next char in the string
+                        int dezChar = fileContentReader.Read();
+
+                        char test = (char)dezChar;
+
+                        if (dezChar == -1)
+                        {
+                            //End of string is reached, set the bool to true
+                            stringEnd = true;
+                        }
+                        else if (dezChar != 9 && dezChar != 10 && dezChar != 13)
+                        {
+                            lineBuilder.Append((char)dezChar);
+                        }
+                    }
+
+                    //Add new line to the list
+                    cleanList.Add(lineBuilder.ToString());
+
+                    fileContentReader.Close();
+                    fileContentReader.Dispose();
+                    lineBuilder.Clear();
+                }
+
+                //Create a string builder
+                StringBuilder stringBuilder = new StringBuilder();
+
+                //Adds every line into one string
+                foreach(string line in cleanList)
+                {
+                    if (!line.StartsWith("//") && !line.EndsWith("*/"))
+                    {
+                        stringBuilder.Append(line);
+                    }
+                    else
+                    {
+                        stringBuilder.Append(line + ";");
+                    }
+                }
+
+                //Return the new string
+                return stringBuilder.ToString();
+            }
+            catch (Exception e)
+            {
+                logger.log(e.Message);
+                return "";
+            }
         }
     }
 }

@@ -33,17 +33,17 @@ namespace ReRead.Components
             }
         }
 
-        public string readFile(string file)
+        public List<string> readFile(string file)
         {
             try
             {
                 //Return the content of the file as a string
-                return File.ReadAllText(file);
+                return File.ReadAllLines(file).ToList();
             }
             catch (Exception e)
             {
                 logger.log(e.Message);
-                return "";
+                return new List<string>();
             }
         }
 
