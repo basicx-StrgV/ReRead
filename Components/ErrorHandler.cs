@@ -1,4 +1,4 @@
-﻿using EasyLogger;
+﻿using BasicxLogger;
 
 namespace ReRead.Components
 {

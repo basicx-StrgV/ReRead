@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using EasyLogger;
+using BasicxLogger;
 
 namespace ReRead.Components
 {

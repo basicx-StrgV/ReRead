@@ -19,4 +19,6 @@ When the program shows **DONE** your new file can be found in the **Output** dir
 
 ## Project Infos
 ### Dependencies
-- EasyLogger: https://github.com/basicx-StrgV/EasyLogger
+BasicxLogger: 
+- Git: https://github.com/basicx-StrgV/BasicxLogger
+- nuget: https://www.nuget.org/packages/BasicxLogger/

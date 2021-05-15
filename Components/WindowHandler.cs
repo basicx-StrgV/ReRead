@@ -1,5 +1,5 @@
 ﻿using System;
-using EasyLogger;
+using BasicxLogger;
 
 namespace ReRead.Components
 {

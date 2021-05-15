@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using EasyLogger;
+using BasicxLogger;
 
 namespace ReRead.Components
 {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using ReRead.Components;
 using ReRead.Configs;
-using EasyLogger;
-using EasyLogger.LoggerFile;
-using EasyLogger.LoggerDirectory;
+using BasicxLogger;
+using BasicxLogger.LoggerFile;
+using BasicxLogger.LoggerDirectory;
 
 namespace ReRead
 {
