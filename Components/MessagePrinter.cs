@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BasicxLogger;
 
 namespace ReRead.Components
@@ -80,6 +81,44 @@ namespace ReRead.Components
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("\nThe file can not be saved!\n");
                 Console.ResetColor();
+            }
+            catch (Exception e)
+            {
+                logger.log(e.Message);
+            }
+        }
+
+        public void allStatus(List<string> doneList, List<string> failedList)
+        {
+            try
+            {
+                //DONE
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("\n" + doneList.Count + " : DONE");
+                Console.ResetColor();
+
+                foreach(string file in doneList)
+                {
+                    Console.WriteLine(file.Split('\\')[
+                                        file.Split('\\').Length - 1]);
+                }
+
+                //FAILED
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("\n" + failedList.Count + " : FAILED");
+                Console.ResetColor();
+
+                foreach (string file in failedList)
+                {
+                    Console.WriteLine(file.Split('\\')[
+                                        file.Split('\\').Length - 1]);
+                }
+
+                //Empty line
+                Console.WriteLine("\n");
+
             }
             catch (Exception e)
             {

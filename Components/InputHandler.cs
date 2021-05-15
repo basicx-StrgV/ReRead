@@ -17,9 +17,19 @@ namespace ReRead.Components
         {
             try
             {
+                //Create new list for the menu and add the option ALL to the list
+                List<string> menuList = new List<string>();
+                menuList.Add("ALL");
+
+                //Add all files to the menu list
+                foreach(string file in fileList)
+                {
+                    menuList.Add(file);
+                }
+
                 //Add EXIT and RELOAD to the List
-                fileList.Add("RELOAD");
-                fileList.Add("EXIT");
+                menuList.Add("RELOAD");
+                menuList.Add("EXIT");
 
                 //Create banner for list with info text
                 Console.BackgroundColor = ConsoleColor.Gray;
@@ -31,7 +41,7 @@ namespace ReRead.Components
                 int menuTopLine = Console.CursorTop;
 
                 //Lists every list entry but removes the file path
-                foreach (string entry in fileList)
+                foreach (string entry in menuList)
                 {
                     Console.WriteLine(entry.Split('\\')[
                                         entry.Split('\\').Length - 1]);
@@ -56,8 +66,8 @@ namespace ReRead.Components
                     Console.ForegroundColor = ConsoleColor.Black;
 
                     //Write the line to highlight it with the selected colors
-                    Console.Write(fileList[listIndex].Split('\\')[
-                                    fileList[listIndex].Split('\\').Length - 1]);
+                    Console.Write(menuList[listIndex].Split('\\')[
+                                    menuList[listIndex].Split('\\').Length - 1]);
 
                     //Set the cursor beck to the start of the selected line
                     Console.SetCursorPosition(0, currentLine);
@@ -71,8 +81,8 @@ namespace ReRead.Components
                     if (key.Key == ConsoleKey.UpArrow && currentLine > menuTopLine)
                     {
                         //Write the line to remove the custom color
-                        Console.Write(fileList[listIndex].Split('\\')[
-                                        fileList[listIndex].Split('\\').Length - 1]);
+                        Console.Write(menuList[listIndex].Split('\\')[
+                                        menuList[listIndex].Split('\\').Length - 1]);
 
                         //Go one line up
                         Console.SetCursorPosition(0, currentLine - 1);
@@ -80,8 +90,8 @@ namespace ReRead.Components
                     else if (key.Key == ConsoleKey.DownArrow && currentLine + 1 < origanalLine)
                     {
                         //Write the line to remove the custom color
-                        Console.Write(fileList[listIndex].Split('\\')[
-                                        fileList[listIndex].Split('\\').Length - 1]);
+                        Console.Write(menuList[listIndex].Split('\\')[
+                                        menuList[listIndex].Split('\\').Length - 1]);
 
                         //Go one line down
                         Console.SetCursorPosition(0, currentLine + 1);
@@ -92,7 +102,7 @@ namespace ReRead.Components
                         Console.ResetColor();
                         Console.SetCursorPosition(0, origanalLine);
                         //Return the value of the selected list entry
-                        return fileList[listIndex];
+                        return menuList[listIndex];
                     }
 
                     //Safe current cursor position

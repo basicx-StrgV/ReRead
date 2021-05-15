@@ -85,12 +85,63 @@ namespace ReRead
                 {
                     //Placeholder
                 }
+                else if (input.Equals("ALL"))
+                {
+                    List<string> doneList = new List<string>();
+                    List<string> failedList = new List<string>();
+
+                    foreach (string file in files)
+                    {
+                        //Read the content of the file
+                        string fileContent = fileHandler.readFile(file);
+
+                        //Read the filename from the selected file path (Select last entry of the string array)
+                        string fileName = file.Split('\\')[
+                                                file.Split('\\').Length - 1];
+
+                        if (fileContent == "")
+                        {
+                            //If somthing went wrong, add the file to the failed list
+                            failedList.Add(file);
+                        }
+                        else
+                        {
+                            //Edit the selected file content
+                            string editedFile = fileEditor.edit(fileContent);
+
+                            //Check new file content
+                            if (editedFile.Equals(""))
+                            {
+                                //If the content is empty add the file to the failed list
+                                failedList.Add(file);
+                            }
+                            else
+                            {
+                                //Save the new file in the 'Output' directory
+                                bool saveStatus = fileHandler.saveFile(fileName, editedFile);
+
+                                if (saveStatus)
+                                {
+                                    doneList.Add(file);
+                                }
+                                else
+                                {
+                                    failedList.Add(file);
+                                }
+                            }
+                        }
+                    }
+
+                    windowHandler.clearWindow();
+                    messagePrinter.allStatus(doneList, failedList);
+                    inputHandler.pressEnterToContinue();
+                }
                 else if (input.Equals(""))
                 {
                     //Display an error if somthing went wrong
                     errorHandler.error(ErrorType.normal);
                 }
-                else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals(""))
+                else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals("ALL") && !input.Equals(""))
                 {
                     //If a file is selected
                     //Read the content of the selected file
