@@ -15,11 +15,12 @@ namespace ReRead.Components
             this.logger = logger;
         }
 
-        public string edit(List<string> fileContent)
+        public List<string> edit(List<string> fileContent)
         {
             string preEditedFileContent = preEdit(fileContent);
             string newString = defaultEdit(preEditedFileContent);
-            return newString;
+            List<string> newFileContent = postEdit(newString);
+            return newFileContent;
         }
 
         private string defaultEdit(string fileContent)
@@ -210,6 +211,53 @@ namespace ReRead.Components
             {
                 logger.log(e.Message);
                 return "";
+            }
+        }
+    
+        private List<string> postEdit(string fileContentString)
+        {
+            try
+            {
+                //Create a array from the string, where every entry is a line in the new file
+                string[] fileContentArray = fileContentString.Split((char)10);
+
+                //Create a list to save the new file content
+                List<string> fileContentList = new List<string>();
+
+                for (int i = 0; i < fileContentArray.Length; i++)
+                {
+                    if (fileContentArray[i].Contains("for(") || fileContentArray[i].Contains("for ("))
+                    {
+                        //Save the current an next two lines as one, so the for loop is not split
+                        fileContentList.Add(fileContentArray[i].TrimEnd() + 
+                                                fileContentArray[i + 1].Trim() + 
+                                                fileContentArray[i + 2].Trim());
+
+                        //Skip the next two lines
+                        i = i + 2;
+                    }
+                    else if (fileContentArray[i].Trim().Equals(""))
+                    {
+                        //Only add empty line if the line before contains '{'
+                        if(fileContentArray[i - 1].Contains("{"))
+                        {
+                            fileContentList.Add(fileContentArray[i]);
+                        }
+                    }
+                    else
+                    {
+                        //Only add line to list
+                        fileContentList.Add(fileContentArray[i]);
+                    }
+                }
+
+                //Return list of new file
+                return fileContentList;
+            }
+            catch (Exception e)
+            {
+                logger.log(e.Message);
+                return new List<string>();
             }
         }
     }

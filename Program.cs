@@ -107,10 +107,10 @@ namespace ReRead
                         else
                         {
                             //Edit the selected file content
-                            string editedFile = fileEditor.edit(fileContent);
+                            List<string> editedFile = fileEditor.edit(fileContent);
 
                             //Check new file content
-                            if (editedFile.Equals(""))
+                            if (editedFile.Equals(new List<string>()))
                             {
                                 //If the content is empty add the file to the failed list
                                 failedList.Add(file);
@@ -159,10 +159,10 @@ namespace ReRead
                     else 
                     {
                         //Edit the selected file content
-                        string editedFile = fileEditor.edit(fileContent);
+                        List<string> editedFile = fileEditor.edit(fileContent);
 
                         //Check new file content
-                        if(editedFile.Equals(""))
+                        if(editedFile.Equals(new List<string>()))
                         {
                             errorHandler.error(ErrorType.normal);
                         }

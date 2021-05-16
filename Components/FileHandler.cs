@@ -63,5 +63,22 @@ namespace ReRead.Components
                 return false;
             }
         }
+
+        public bool saveFile(string fileName, List<string> fileContent)
+        {
+            try
+            {
+                //Write the new file in the 'Output' directory
+                File.WriteAllLines(dirConfig.outputFolderPath + "ReRead_" + fileName, fileContent);
+
+                //Return true to signal that the file got saved
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.log(e.Message);
+                return false;
+            }
+        }
     }
 }
