@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using BasicxLogger;
+using BasicxLogger.Message;
 
 namespace ReRead.Components
 {
@@ -135,7 +136,7 @@ namespace ReRead.Components
             }
             catch(Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 return "";
             }
         }
@@ -209,7 +210,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 return "";
             }
         }
@@ -256,7 +257,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 return new List<string>();
             }
         }

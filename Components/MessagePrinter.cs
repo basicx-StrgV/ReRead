@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BasicxLogger;
+using BasicxLogger.Message;
 
 namespace ReRead.Components
 {
@@ -24,7 +25,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -39,7 +40,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -54,7 +55,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -69,7 +70,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -84,7 +85,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -122,7 +123,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
     }

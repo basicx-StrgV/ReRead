@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ReRead.Components;
 using ReRead.Configs;
 using BasicxLogger;
+using BasicxLogger.Message;
 using BasicxLogger.LoggerFile;
 using BasicxLogger.LoggerDirectory;
 
@@ -14,7 +15,8 @@ namespace ReRead
 
         private Logger logger = new Logger(
             new LogFile("ReRead", LogFileType.log), 
-            new LogDirectory(dirConfig.programFolderPath, "Logs"));
+            new LogDirectory(dirConfig.programFolderPath, "Logs"),
+            new MessageFormat(DateFormat.year_month_day, '/'));
 
         private WindowHandler windowHandler;
         private FileEditor fileEditor;

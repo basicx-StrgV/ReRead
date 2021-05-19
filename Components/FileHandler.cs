@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using ReRead.Configs;
 using BasicxLogger;
+using BasicxLogger.Message;
 
 namespace ReRead.Components
 {
@@ -27,7 +28,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 List<string> emptyList = new List<string>();
                 return emptyList;
             }
@@ -42,7 +43,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 return new List<string>();
             }
         }
@@ -59,7 +60,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 return false;
             }
         }
@@ -76,7 +77,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 return false;
             }
         }
