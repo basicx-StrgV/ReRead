@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using ReRead.Components;
 using ReRead.Configs;
-using EasyLogger;
-using EasyLogger.LoggerFile;
-using EasyLogger.LoggerDirectory;
+using BasicxLogger;
+using BasicxLogger.Message;
+using BasicxLogger.LoggerFile;
+using BasicxLogger.LoggerDirectory;
 
 namespace ReRead
 {
@@ -14,7 +15,8 @@ namespace ReRead
 
         private Logger logger = new Logger(
             new LogFile("ReRead", LogFileType.log), 
-            new LogDirectory(dirConfig.programFolderPath, "Logs"));
+            new LogDirectory(dirConfig.programFolderPath, "Logs"),
+            new MessageFormat(DateFormat.year_month_day, '/'));
 
         private WindowHandler windowHandler;
         private FileEditor fileEditor;
@@ -85,22 +87,73 @@ namespace ReRead
                 {
                     //Placeholder
                 }
+                else if (input.Equals("ALL"))
+                {
+                    List<string> doneList = new List<string>();
+                    List<string> failedList = new List<string>();
+
+                    foreach (string file in files)
+                    {
+                        //Read the content of the file
+                        List<string> fileContent = fileHandler.readFile(file);
+
+                        //Read the filename from the selected file path (Select last entry of the string array)
+                        string fileName = file.Split('\\')[
+                                                file.Split('\\').Length - 1];
+
+                        if (fileContent.Count == 0)
+                        {
+                            //If somthing went wrong, add the file to the failed list
+                            failedList.Add(file);
+                        }
+                        else
+                        {
+                            //Edit the selected file content
+                            List<string> editedFile = fileEditor.edit(fileContent);
+
+                            //Check new file content
+                            if (editedFile.Equals(new List<string>()))
+                            {
+                                //If the content is empty add the file to the failed list
+                                failedList.Add(file);
+                            }
+                            else
+                            {
+                                //Save the new file in the 'Output' directory
+                                bool saveStatus = fileHandler.saveFile(fileName, editedFile);
+
+                                if (saveStatus)
+                                {
+                                    doneList.Add(file);
+                                }
+                                else
+                                {
+                                    failedList.Add(file);
+                                }
+                            }
+                        }
+                    }
+
+                    windowHandler.clearWindow();
+                    messagePrinter.allStatus(doneList, failedList);
+                    inputHandler.pressEnterToContinue();
+                }
                 else if (input.Equals(""))
                 {
                     //Display an error if somthing went wrong
                     errorHandler.error(ErrorType.normal);
                 }
-                else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals(""))
+                else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals("ALL") && !input.Equals(""))
                 {
                     //If a file is selected
                     //Read the content of the selected file
-                    string fileContent = fileHandler.readFile(input);
+                    List<string> fileContent = fileHandler.readFile(input);
 
                     //Read the filename from the selected file path (Select last entry of the string array)
                     string fileName = input.Split('\\')[
                                             input.Split('\\').Length - 1];
 
-                    if (fileContent == "")
+                    if (fileContent.Count == 0)
                     {
                         //If somthing went wrong while reading the file or if the file is empty, display an error
                         errorHandler.error(ErrorType.file);
@@ -108,10 +161,10 @@ namespace ReRead
                     else 
                     {
                         //Edit the selected file content
-                        string editedFile = fileEditor.edit(fileContent);
+                        List<string> editedFile = fileEditor.edit(fileContent);
 
                         //Check new file content
-                        if(editedFile.Equals(""))
+                        if(editedFile.Equals(new List<string>()))
                         {
                             errorHandler.error(ErrorType.normal);
                         }

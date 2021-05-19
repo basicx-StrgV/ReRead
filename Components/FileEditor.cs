@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using EasyLogger;
+using BasicxLogger;
+using BasicxLogger.Message;
 
 namespace ReRead.Components
 {
@@ -14,11 +16,12 @@ namespace ReRead.Components
             this.logger = logger;
         }
 
-        public string edit(string fileContent)
+        public List<string> edit(List<string> fileContent)
         {
             string preEditedFileContent = preEdit(fileContent);
             string newString = defaultEdit(preEditedFileContent);
-            return newString;
+            List<string> newFileContent = postEdit(newString);
+            return newFileContent;
         }
 
         private string defaultEdit(string fileContent)
@@ -133,17 +136,130 @@ namespace ReRead.Components
             }
             catch(Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
                 return "";
             }
         }
     
-        private string preEdit(string fileContent)
+        private string preEdit(List<string> fileContent)
         {
-            //Remove white-spaces at the start and end of the string
-            string trimedFileContent = fileContent.Trim();
+            try
+            {
+                //List that will contain every line in the file but with white-spaces, \n usw removed
+                List<string> cleanList = new List<string>();
 
-            return trimedFileContent;
+                //Edits every line and adds it to the new list
+                foreach (string line in fileContent)
+                {
+                    //Remove white-spaces at the start and end of the string
+                    string trimedFileContent = line.Trim();
+
+                    //Create a string builder
+                    StringBuilder lineBuilder = new StringBuilder();
+
+                    //Create a string reader for the trimed file content
+                    StringReader fileContentReader = new StringReader(trimedFileContent);
+
+                    //bool will bes set to true if the end of the string is reached
+                    bool stringEnd = false;
+
+                    while (!stringEnd)
+                    {
+                        //Get the dezimal value of the next char in the string
+                        int dezChar = fileContentReader.Read();
+
+                        char test = (char)dezChar;
+
+                        if (dezChar == -1)
+                        {
+                            //End of string is reached, set the bool to true
+                            stringEnd = true;
+                        }
+                        else if (dezChar != 9 && dezChar != 10 && dezChar != 13)
+                        {
+                            lineBuilder.Append((char)dezChar);
+                        }
+                    }
+
+                    //Add new line to the list
+                    cleanList.Add(lineBuilder.ToString());
+
+                    fileContentReader.Close();
+                    fileContentReader.Dispose();
+                    lineBuilder.Clear();
+                }
+
+                //Create a string builder
+                StringBuilder stringBuilder = new StringBuilder();
+
+                //Adds every line into one string
+                foreach(string line in cleanList)
+                {
+                    if (!line.StartsWith("//") && !line.EndsWith("*/"))
+                    {
+                        stringBuilder.Append(line);
+                    }
+                    else
+                    {
+                        stringBuilder.Append(line + ";");
+                    }
+                }
+
+                //Return the new string
+                return stringBuilder.ToString();
+            }
+            catch (Exception e)
+            {
+                logger.log(Tag.EXCEPTION, e.Message);
+                return "";
+            }
+        }
+    
+        private List<string> postEdit(string fileContentString)
+        {
+            try
+            {
+                //Create a array from the string, where every entry is a line in the new file
+                string[] fileContentArray = fileContentString.Split((char)10);
+
+                //Create a list to save the new file content
+                List<string> fileContentList = new List<string>();
+
+                for (int i = 0; i < fileContentArray.Length; i++)
+                {
+                    if (fileContentArray[i].Contains("for(") || fileContentArray[i].Contains("for ("))
+                    {
+                        //Save the current an next two lines as one, so the for loop is not split
+                        fileContentList.Add(fileContentArray[i].TrimEnd() + 
+                                                fileContentArray[i + 1].Trim() + 
+                                                fileContentArray[i + 2].Trim());
+
+                        //Skip the next two lines
+                        i = i + 2;
+                    }
+                    else if (fileContentArray[i].Trim().Equals(""))
+                    {
+                        //Only add empty line if the line before contains '{'
+                        if(fileContentArray[i - 1].Contains("{"))
+                        {
+                            fileContentList.Add(fileContentArray[i]);
+                        }
+                    }
+                    else
+                    {
+                        //Only add line to list
+                        fileContentList.Add(fileContentArray[i]);
+                    }
+                }
+
+                //Return list of new file
+                return fileContentList;
+            }
+            catch (Exception e)
+            {
+                logger.log(Tag.EXCEPTION, e.Message);
+                return new List<string>();
+            }
         }
     }
 }

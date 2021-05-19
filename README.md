@@ -5,7 +5,7 @@ ReRead is a small console program that can make code files, that are hard to rea
 
 ![ReRead](https://i.imgur.com/McLc8jk.png)
 
-![ReRead](https://i.imgur.com/IcSDCnf.png)
+![ReRead](https://i.imgur.com/wWgSGIW.png)
 
 ## How to use
 When the program is first started, it will create a **ReRead** folder, that contains an **Input**, **Output** and **Log** folder.
@@ -19,4 +19,6 @@ When the program shows **DONE** your new file can be found in the **Output** dir
 
 ## Project Infos
 ### Dependencies
-- EasyLogger: https://github.com/basicx-StrgV/EasyLogger
+BasicxLogger: 
+- Git: https://github.com/basicx-StrgV/BasicxLogger
+- nuget: https://www.nuget.org/packages/BasicxLogger/

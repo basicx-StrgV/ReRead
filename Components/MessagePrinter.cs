@@ -1,5 +1,7 @@
 ﻿using System;
-using EasyLogger;
+using System.Collections.Generic;
+using BasicxLogger;
+using BasicxLogger.Message;
 
 namespace ReRead.Components
 {
@@ -23,7 +25,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -38,7 +40,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -53,7 +55,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -68,7 +70,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
 
@@ -83,7 +85,45 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(e.Message);
+                logger.log(Tag.EXCEPTION, e.Message);
+            }
+        }
+
+        public void allStatus(List<string> doneList, List<string> failedList)
+        {
+            try
+            {
+                //DONE
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("\n" + doneList.Count + " : DONE");
+                Console.ResetColor();
+
+                foreach(string file in doneList)
+                {
+                    Console.WriteLine(file.Split('\\')[
+                                        file.Split('\\').Length - 1]);
+                }
+
+                //FAILED
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("\n" + failedList.Count + " : FAILED");
+                Console.ResetColor();
+
+                foreach (string file in failedList)
+                {
+                    Console.WriteLine(file.Split('\\')[
+                                        file.Split('\\').Length - 1]);
+                }
+
+                //Empty line
+                Console.WriteLine("\n");
+
+            }
+            catch (Exception e)
+            {
+                logger.log(Tag.EXCEPTION, e.Message);
             }
         }
     }
