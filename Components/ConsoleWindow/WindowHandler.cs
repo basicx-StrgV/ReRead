@@ -2,7 +2,7 @@
 using BasicxLogger;
 using BasicxLogger.Message;
 
-namespace ReRead.Components
+namespace ReRead.Components.ConsoleWindow
 {
     class WindowHandler
     {

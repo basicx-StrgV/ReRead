@@ -1,6 +1,6 @@
 ﻿using BasicxLogger;
 
-namespace ReRead.Components
+namespace ReRead.Components.ConsoleWindow
 {
     class ErrorHandler
     {

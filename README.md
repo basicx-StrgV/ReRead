@@ -17,6 +17,20 @@ Then you just need to select the file that you want.
 
 When the program shows **DONE** your new file can be found in the **Output** directory.
 
+### Options
+
+You can also use arguments.
+
+Use "-file" or "-f" to only use a specified file from any directory you want:
+```
+ReRead.exe -f C:\myDirectory\file.js"
+```
+
+Use "-directory" or "-d" to use every file from any directory you want:
+```
+"ReRead.exe -d C:\myDirectory" 
+```
+
 ## Project Infos
 ### Dependencies
 BasicxLogger: 

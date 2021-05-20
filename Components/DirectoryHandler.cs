@@ -3,6 +3,8 @@ using System.IO;
 using ReRead.Configs;
 using BasicxLogger;
 using BasicxLogger.Message;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ReRead.Components
 {
@@ -54,6 +56,16 @@ namespace ReRead.Components
             {
                 logger.log(Tag.EXCEPTION, e.Message);
             }
+        }
+    
+        public bool checkDirectory(string directory)
+        {
+            return Directory.Exists(directory);
+        }
+    
+        public List<string> getFiles(string directory)
+        {
+            return Directory.GetFiles(directory).ToList();
         }
     }
 }

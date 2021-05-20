@@ -81,5 +81,10 @@ namespace ReRead.Components
                 return false;
             }
         }
+    
+        public bool checkFile(string file)
+        {
+            return File.Exists(file);
+        }
     }
 }
