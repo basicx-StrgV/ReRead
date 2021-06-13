@@ -1,30 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using BasicxLogger;
-using BasicxLogger.Message;
 
-namespace ReRead.Components
+namespace ReRead
 {
     class FileEditor
     {
-        private Logger logger;
+        private readonly FileLogger _logger;
 
-        public FileEditor(Logger logger)
+        public FileEditor(FileLogger logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
-        public List<string> edit(List<string> fileContent)
+        public List<string> Edit(List<string> fileContent)
         {
-            string preEditedFileContent = preEdit(fileContent);
-            string newString = defaultEdit(preEditedFileContent);
-            List<string> newFileContent = postEdit(newString);
+            string preEditedFileContent = PreEdit(fileContent);
+            string newString = DefaultEdit(preEditedFileContent);
+            List<string> newFileContent = PostEdit(newString);
             return newFileContent;
         }
 
-        private string defaultEdit(string fileContent)
+        private string DefaultEdit(string fileContent)
         {
             try
             {
@@ -136,12 +135,12 @@ namespace ReRead.Components
             }
             catch(Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 return "";
             }
         }
     
-        private string preEdit(List<string> fileContent)
+        private string PreEdit(List<string> fileContent)
         {
             try
             {
@@ -210,12 +209,12 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 return "";
             }
         }
     
-        private List<string> postEdit(string fileContentString)
+        private List<string> PostEdit(string fileContentString)
         {
             try
             {
@@ -235,7 +234,7 @@ namespace ReRead.Components
                                                 fileContentArray[i + 2].Trim());
 
                         //Skip the next two lines
-                        i = i + 2;
+                        i += 2;
                     }
                     else if (fileContentArray[i].Trim().Equals(""))
                     {
@@ -257,7 +256,7 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 return new List<string>();
             }
         }

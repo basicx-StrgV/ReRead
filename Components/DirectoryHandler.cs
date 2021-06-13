@@ -1,69 +1,68 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 using ReRead.Configs;
 using BasicxLogger;
-using BasicxLogger.Message;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace ReRead.Components
+namespace ReRead
 {
     class DirectoryHandler
     {
-        private DirectoryConfig dirConfig;
-        private Logger logger;
+        private readonly DirectoryConfig _dirConfig;
+        private readonly FileLogger _logger;
 
-        public DirectoryHandler(DirectoryConfig directoryConfig, Logger logger)
+        public DirectoryHandler(DirectoryConfig directoryConfig, FileLogger logger)
         {
-            this.dirConfig = directoryConfig;
-            this.logger = logger;
+            _dirConfig = directoryConfig;
+            _logger = logger;
         }
 
-        public void createProgramMainDir()
+        public void CreateProgramMainDir()
         {
             try
             {
                 //Create the program folder (ReRead): "path_of_the_program/ReRead/"
-                Directory.CreateDirectory(dirConfig.programFolderPath);
+                Directory.CreateDirectory(_dirConfig.ProgramFolderPath);
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void createInputDir()
+        public void CreateInputDir()
         {
             try 
             {
                 //Create the 'Input' folder: "path_of_the_program/ReRead/Input/"
-                Directory.CreateDirectory(dirConfig.inputFolderPath);
+                Directory.CreateDirectory(_dirConfig.InputFolderPath);
             }
             catch(Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void createOutputDir()
+        public void CreateOutputDir()
         {
             try
             {
                 //Create the 'Output' folder: "path_of_the_program/ReRead/Output/"
-                Directory.CreateDirectory(dirConfig.outputFolderPath);
+                Directory.CreateDirectory(_dirConfig.OutputFolderPath);
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
     
-        public bool checkDirectory(string directory)
+        public bool CheckDirectory(string directory)
         {
             return Directory.Exists(directory);
         }
     
-        public List<string> getFiles(string directory)
+        public List<string> GetFiles(string directory)
         {
             return Directory.GetFiles(directory).ToList();
         }

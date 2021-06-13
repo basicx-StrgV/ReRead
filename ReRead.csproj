@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BasicxLogger" Version="1.1.0" />
+    <PackageReference Include="BasicxLogger" Version="2.0.1" />
   </ItemGroup>
 
 </Project>

@@ -1,46 +1,41 @@
 ﻿using System;
-using ReRead.Components;
 using ReRead.Configs;
-using ReRead.Modes;
 using BasicxLogger;
-using BasicxLogger.Message;
-using BasicxLogger.LoggerFile;
-using BasicxLogger.LoggerDirectory;
+using BasicxLogger.Files;
+
 
 namespace ReRead
 {
     class Program
     {
-        private static DirectoryConfig dirConfig = new DirectoryConfig(Environment.CurrentDirectory);
+        private static DirectoryConfig s_dirConfig = new DirectoryConfig(Environment.CurrentDirectory);
 
-        private static Logger logger = new Logger(
-            new LogFile("ReRead", LogFileType.log), 
-            new LogDirectory(dirConfig.programFolderPath, "Logs"),
-            new MessageFormat(DateFormat.year_month_day, '/'));
+        private static FileLogger s_logger = new FileLogger(
+            new TxtLogFile(s_dirConfig.ProgramFolderPath + "Logs", "Log"));
 
-        private static FileEditor fileEditor;
-        private static DirectoryHandler directoryHandler;
-        private static FileHandler fileHandler;
+        private static FileEditor s_fileEditor;
+        private static DirectoryHandler s_directoryHandler;
+        private static FileHandler s_fileHandler;
 
         static void Main(string[] args)
         {
-            initialize();
+            Initialize();
             
             if(args.Length > 0 && args.Length < 3)
             {
                 switch (args[0])
                 {
                     case "-file":
-                        new FileMode(logger, fileEditor, fileHandler, args[1]);
+                        new FileMode(s_logger, s_fileEditor, s_fileHandler, args[1]);
                         break;
                     case "-f":
-                        new FileMode(logger, fileEditor, fileHandler, args[1]);
+                        new FileMode(s_logger, s_fileEditor, s_fileHandler, args[1]);
                         break;
                     case "-directory":
-                        new DirectoryMode(logger, fileEditor, fileHandler, directoryHandler, args[1]);
+                        new DirectoryMode(s_logger, s_fileEditor, s_fileHandler, s_directoryHandler, args[1]);
                         break;
                     case "-d":
-                        new DirectoryMode(logger, fileEditor, fileHandler, directoryHandler, args[1]);
+                        new DirectoryMode(s_logger, s_fileEditor, s_fileHandler, s_directoryHandler, args[1]);
                         break;
                     default:
                         Console.WriteLine("unknown argument: " + args[0]);
@@ -53,21 +48,21 @@ namespace ReRead
             }
             else
             {
-                new ConsoleMode(logger, fileEditor, fileHandler);
+                new ConsoleMode(s_logger, s_fileEditor, s_fileHandler);
             }
         }
 
-        private static void initialize()
+        private static void Initialize()
         {
             //Create objects of default program components
-            fileEditor = new FileEditor(logger);
-            directoryHandler = new DirectoryHandler(dirConfig, logger);
-            fileHandler = new FileHandler(dirConfig, logger);
+            s_fileEditor = new FileEditor(s_logger);
+            s_directoryHandler = new DirectoryHandler(s_dirConfig, s_logger);
+            s_fileHandler = new FileHandler(s_dirConfig, s_logger);
 
             //Create every directory needed by the program
-            directoryHandler.createProgramMainDir();
-            directoryHandler.createInputDir();
-            directoryHandler.createOutputDir();
+            s_directoryHandler.CreateProgramMainDir();
+            s_directoryHandler.CreateInputDir();
+            s_directoryHandler.CreateOutputDir();
         }
     }
 }

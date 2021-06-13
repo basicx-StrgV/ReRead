@@ -3,25 +3,25 @@
     class DirectoryConfig
     {
         //Path of the program
-        private string workingDirectory;
+        private readonly string _workingDirectory;
 
         //Configur names of different folders
-        private string programFolder = "ReRead"; // "/workingDirectory/ReRead/"
-        private string inputFolder = "Input"; // "/workingDirectory/ReRead/Input/"
-        private string outputFolder = "Output"; // "/workingDirectory/ReRead/Output/"
+        private readonly string _programFolder = "ReRead"; // "/workingDirectory/ReRead/"
+        private readonly string _inputFolder = "Input"; // "/workingDirectory/ReRead/Input/"
+        private readonly string _outputFolder = "Output"; // "/workingDirectory/ReRead/Output/"
 
         //Complet paths for easy access
-        public string programFolderPath { get; }
-        public string inputFolderPath { get; }
-        public string outputFolderPath { get; }
+        public string ProgramFolderPath { get; }
+        public string InputFolderPath { get; }
+        public string OutputFolderPath { get; }
 
         public DirectoryConfig(string workingDirectory)
         {
-            this.workingDirectory = workingDirectory + "\\";
+            _workingDirectory = workingDirectory + "\\";
 
-            this.programFolderPath = this.workingDirectory + this.programFolder + "\\";
-            this.inputFolderPath = this.programFolderPath + this.inputFolder + "\\";
-            this.outputFolderPath = this.programFolderPath + this.outputFolder + "\\";
+            ProgramFolderPath = _workingDirectory + _programFolder + "\\";
+            InputFolderPath = ProgramFolderPath + _inputFolder + "\\";
+            OutputFolderPath = ProgramFolderPath + _outputFolder + "\\";
         }
     }
 }

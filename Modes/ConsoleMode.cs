@@ -1,62 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using ReRead.Components;
-using ReRead.Components.ConsoleWindow;
 using BasicxLogger;
 
-namespace ReRead.Modes
+namespace ReRead
 {
     class ConsoleMode
     {
-        private Logger logger;
-        private WindowHandler windowHandler;
-        private FileEditor fileEditor;
-        private FileHandler fileHandler;
-        private InputHandler inputHandler;
-        private MessagePrinter messagePrinter;
-        private ErrorHandler errorHandler;
+        private readonly FileLogger _logger;
+        private readonly WindowHandler _windowHandler;
+        private readonly FileEditor _fileEditor;
+        private readonly FileHandler _fileHandler;
+        private readonly InputHandler _inputHandler;
+        private readonly MessagePrinter _messagePrinter;
+        private readonly ErrorHandler _errorHandler;
 
 
-        public ConsoleMode(Logger logger, FileEditor fileEditor, FileHandler fileHandler)
+        public ConsoleMode(FileLogger logger, FileEditor fileEditor, FileHandler fileHandler)
         {
-            this.logger = logger;
-            this.fileEditor = fileEditor;
-            this.fileHandler = fileHandler;
+            _logger = logger;
+            _fileEditor = fileEditor;
+            _fileHandler = fileHandler;
 
-            windowHandler = new WindowHandler(this.logger);
-            inputHandler = new InputHandler(this.logger);
-            messagePrinter = new MessagePrinter(this.logger);
-            errorHandler = new ErrorHandler(this.logger, windowHandler, messagePrinter, inputHandler);
+            _windowHandler = new WindowHandler(_logger);
+            _inputHandler = new InputHandler(_logger);
+            _messagePrinter = new MessagePrinter(_logger);
+            _errorHandler = new ErrorHandler(_logger, _windowHandler, _messagePrinter, _inputHandler);
 
-            startup();
-            run();
+            Startup();
+            Run();
         }
 
-        private void startup()
+        private void Startup()
         {
             //First message
-            windowHandler.clearWindow();
-            messagePrinter.start();
-            inputHandler.pressEnterToContinue();
+            _windowHandler.ClearWindow();
+            _messagePrinter.Start();
+            _inputHandler.PressEnterToContinue();
         }
 
-        public  void run()
+        public  void Run()
         {
             while (true)
             {
-                windowHandler.clearWindow();
+                _windowHandler.ClearWindow();
 
                 //Get a list of every file in the 'ReRead_Input' directory
-                List<string> files = fileHandler.getFileList();
+                List<string> files = _fileHandler.GetFileList();
 
                 //Open thefile select menu and save the selection to the input string
-                string input = inputHandler.fileSelectMenu(files);
+                string input = _inputHandler.FileSelectMenu(files);
 
                 //Process input
                 if (input.Equals("EXIT"))
                 {
                     //Open the exit menu if the user selected 'EXIT'
-                    exit();
+                    Exit();
                 }
                 else if (input.Equals("RELOAD"))
                 {
@@ -70,7 +68,7 @@ namespace ReRead.Modes
                     foreach (string file in files)
                     {
                         //Read the content of the file
-                        List<string> fileContent = fileHandler.readFile(file);
+                        List<string> fileContent = _fileHandler.ReadFile(file);
 
                         //Read the filename from the selected file path (Select last entry of the string array)
                         string fileName = file.Split('\\')[
@@ -84,7 +82,7 @@ namespace ReRead.Modes
                         else
                         {
                             //Edit the selected file content
-                            List<string> editedFile = fileEditor.edit(fileContent);
+                            List<string> editedFile = _fileEditor.Edit(fileContent);
 
                             //Check new file content
                             if (editedFile.Equals(new List<string>()))
@@ -95,7 +93,7 @@ namespace ReRead.Modes
                             else
                             {
                                 //Save the new file in the 'Output' directory
-                                bool saveStatus = fileHandler.saveFile(fileName, editedFile);
+                                bool saveStatus = _fileHandler.SaveFile(fileName, editedFile);
 
                                 if (saveStatus)
                                 {
@@ -109,20 +107,20 @@ namespace ReRead.Modes
                         }
                     }
 
-                    windowHandler.clearWindow();
-                    messagePrinter.allStatus(doneList, failedList);
-                    inputHandler.pressEnterToContinue();
+                    _windowHandler.ClearWindow();
+                    _messagePrinter.AllStatus(doneList, failedList);
+                    _inputHandler.PressEnterToContinue();
                 }
                 else if (input.Equals(""))
                 {
                     //Display an error if somthing went wrong
-                    errorHandler.error(ErrorType.normal);
+                    _errorHandler.Error(ErrorType.normal);
                 }
                 else if (!input.Equals("EXIT") && !input.Equals("RELOAD") && !input.Equals("ALL") && !input.Equals(""))
                 {
                     //If a file is selected
                     //Read the content of the selected file
-                    List<string> fileContent = fileHandler.readFile(input);
+                    List<string> fileContent = _fileHandler.ReadFile(input);
 
                     //Read the filename from the selected file path (Select last entry of the string array)
                     string fileName = input.Split('\\')[
@@ -131,32 +129,32 @@ namespace ReRead.Modes
                     if (fileContent.Count == 0)
                     {
                         //If somthing went wrong while reading the file or if the file is empty, display an error
-                        errorHandler.error(ErrorType.file);
+                        _errorHandler.Error(ErrorType.file);
                     }
                     else
                     {
                         //Edit the selected file content
-                        List<string> editedFile = fileEditor.edit(fileContent);
+                        List<string> editedFile = _fileEditor.Edit(fileContent);
 
                         //Check new file content
                         if (editedFile.Equals(new List<string>()))
                         {
-                            errorHandler.error(ErrorType.normal);
+                            _errorHandler.Error(ErrorType.normal);
                         }
                         else
                         {
                             //Save the new file in the 'Output' directory
-                            bool saveStatus = fileHandler.saveFile(fileName, editedFile);
+                            bool saveStatus = _fileHandler.SaveFile(fileName, editedFile);
 
                             if (saveStatus)
                             {
-                                windowHandler.clearWindow();
-                                messagePrinter.done();
-                                inputHandler.pressEnterToContinue();
+                                _windowHandler.ClearWindow();
+                                _messagePrinter.Done();
+                                _inputHandler.PressEnterToContinue();
                             }
                             else
                             {
-                                errorHandler.error(ErrorType.save);
+                                _errorHandler.Error(ErrorType.save);
                             }
                         }
                     }
@@ -164,9 +162,9 @@ namespace ReRead.Modes
             }
         }
 
-        private void exit()
+        private void Exit()
         {
-            windowHandler.clearWindow();
+            _windowHandler.ClearWindow();
             Console.BackgroundColor = ConsoleColor.Yellow;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("\nAre you sure thet you want to exit?");

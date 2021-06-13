@@ -1,20 +1,19 @@
 ﻿using System;
 using BasicxLogger;
-using BasicxLogger.Message;
 
-namespace ReRead.Components.ConsoleWindow
+namespace ReRead
 {
     class WindowHandler
     {
-        Logger logger;
+        private readonly FileLogger _logger;
 
-        public WindowHandler(Logger logger)
+        public WindowHandler(FileLogger logger)
         {
-            this.logger = logger;
-            configureWindow();
+            _logger = logger;
+            ConfigureWindow();
         }
 
-        public void clearWindow()
+        public void ClearWindow()
         {
             try
             {
@@ -30,11 +29,11 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void configureWindow()
+        public void ConfigureWindow()
         {
             try
             {
@@ -44,7 +43,7 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
     }

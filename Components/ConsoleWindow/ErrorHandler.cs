@@ -1,43 +1,43 @@
 ﻿using BasicxLogger;
 
-namespace ReRead.Components.ConsoleWindow
+namespace ReRead
 {
     class ErrorHandler
     {
-        Logger logger;
-        WindowHandler windowHandler;
-        MessagePrinter messagePrinter;
-        InputHandler inputHandler;
+        private readonly FileLogger _logger;
+        private readonly WindowHandler _windowHandler;
+        private readonly MessagePrinter _messagePrinter;
+        private readonly InputHandler _inputHandler;
 
-        public ErrorHandler(Logger logger, WindowHandler windowHandler,MessagePrinter messagePrinter, InputHandler inputHandler)
+        public ErrorHandler(FileLogger logger, WindowHandler windowHandler, MessagePrinter messagePrinter, InputHandler inputHandler)
         {
-            this.logger = logger;
-            this.windowHandler = windowHandler;
-            this.messagePrinter = messagePrinter;
-            this.inputHandler = inputHandler;
+            _logger = logger;
+            _windowHandler = windowHandler;
+            _messagePrinter = messagePrinter;
+            _inputHandler = inputHandler;
         }
 
-        public void error(ErrorType errorType)
+        public void Error(ErrorType errorType)
         {
-            windowHandler.clearWindow();
+            _windowHandler.ClearWindow();
 
             switch (errorType)
             {
                 case ErrorType.normal:
-                    messagePrinter.error();
+                    _messagePrinter.Error();
                     break;
                 case ErrorType.file:
-                    messagePrinter.fileError();
+                    _messagePrinter.FileError();
                     break;
                 case ErrorType.save:
-                    messagePrinter.saveError();
+                    _messagePrinter.SaveError();
                     break;
                 default:
-                    messagePrinter.error();
+                    _messagePrinter.Error();
                     break;
             }
 
-            inputHandler.pressEnterToContinue();
+            _inputHandler.PressEnterToContinue();
         }
     }
 

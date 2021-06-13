@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using BasicxLogger;
-using BasicxLogger.Message;
 
-namespace ReRead.Components.ConsoleWindow
+namespace ReRead
 {
     class InputHandler
     {
-        private Logger logger;
+        private readonly FileLogger _logger;
 
-        public InputHandler(Logger logger)
+        public InputHandler(FileLogger logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
-        public string fileSelectMenu(List<string> fileList)
+        public string FileSelectMenu(List<string> fileList)
         {
             try
             {
@@ -112,12 +111,12 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch(Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 return "";
             }
         }
     
-        public void pressEnterToContinue()
+        public void PressEnterToContinue()
         {
             try
             {
@@ -137,7 +136,7 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch(Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
     }

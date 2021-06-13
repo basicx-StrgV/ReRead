@@ -1,40 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using ReRead.Configs;
 using BasicxLogger;
-using BasicxLogger.Message;
 
-namespace ReRead.Components
+namespace ReRead
 {
     class FileHandler
     {
-        private DirectoryConfig dirConfig;
-        private Logger logger;
+        private readonly DirectoryConfig _dirConfig;
+        private readonly FileLogger _logger;
 
-        public FileHandler(DirectoryConfig directoryConfig, Logger logger)
+        public FileHandler(DirectoryConfig directoryConfig, FileLogger logger)
         {
-            this.dirConfig = directoryConfig;
-            this.logger = logger;
+            _dirConfig = directoryConfig;
+            _logger = logger;
         }
 
-        public List<string> getFileList()
+        public List<string> GetFileList()
         {
             try
             {
                 //Returns a list of every file in the 'Input' directory
-                return Directory.GetFiles(dirConfig.inputFolderPath).ToList();
+                return Directory.GetFiles(_dirConfig.InputFolderPath).ToList();
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 List<string> emptyList = new List<string>();
                 return emptyList;
             }
         }
 
-        public List<string> readFile(string file)
+        public List<string> ReadFile(string file)
         {
             try
             {
@@ -43,46 +42,46 @@ namespace ReRead.Components
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 return new List<string>();
             }
         }
 
-        public bool saveFile(string fileName, string fileContent)
+        public bool SaveFile(string fileName, string fileContent)
         {
             try
             {
                 //Write the new file in the 'Output' directory
-                File.WriteAllText(dirConfig.outputFolderPath + "ReRead_" + fileName, fileContent);
+                File.WriteAllText(_dirConfig.OutputFolderPath + "ReRead_" + fileName, fileContent);
 
                 //Return true to signal that the file got saved
                 return true;
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 return false;
             }
         }
 
-        public bool saveFile(string fileName, List<string> fileContent)
+        public bool SaveFile(string fileName, List<string> fileContent)
         {
             try
             {
                 //Write the new file in the 'Output' directory
-                File.WriteAllLines(dirConfig.outputFolderPath + "ReRead_" + fileName, fileContent);
+                File.WriteAllLines(_dirConfig.OutputFolderPath + "ReRead_" + fileName, fileContent);
 
                 //Return true to signal that the file got saved
                 return true;
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
                 return false;
             }
         }
     
-        public bool checkFile(string file)
+        public bool CheckFile(string file)
         {
             return File.Exists(file);
         }

@@ -1,37 +1,35 @@
-﻿using BasicxLogger;
-using ReRead.Components;
-using ReRead.Components.ConsoleWindow;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using BasicxLogger;
 
-namespace ReRead.Modes
+namespace ReRead
 {
     class DirectoryMode
     {
-        private Logger logger;
-        private FileEditor fileEditor;
-        private FileHandler fileHandler;
-        private DirectoryHandler directoryHandler;
-        private MessagePrinter messagePrinter;
+        private readonly FileLogger _logger;
+        private readonly FileEditor _fileEditor;
+        private readonly FileHandler _fileHandler;
+        private readonly DirectoryHandler _directoryHandler;
+        private readonly MessagePrinter _messagePrinter;
 
-        public DirectoryMode(Logger logger, FileEditor fileEditor, FileHandler fileHandler,
+        public DirectoryMode(FileLogger logger, FileEditor fileEditor, FileHandler fileHandler,
                                 DirectoryHandler directoryHandler, string directory)
         {
-            this.logger = logger;
-            this.fileEditor = fileEditor;
-            this.fileHandler = fileHandler;
-            this.directoryHandler = directoryHandler;
+            _logger = logger;
+            _fileEditor = fileEditor;
+            _fileHandler = fileHandler;
+            _directoryHandler = directoryHandler;
 
-            messagePrinter = new MessagePrinter(this.logger);
+            _messagePrinter = new MessagePrinter(_logger);
 
-            run(directory);
+            Run(directory);
         }
 
-        private void run(string directory)
+        private void Run(string directory)
         {
-            if (directoryHandler.checkDirectory(directory))
+            if (_directoryHandler.CheckDirectory(directory))
             {
-                List<string> files = directoryHandler.getFiles(directory);
+                List<string> files = _directoryHandler.GetFiles(directory);
 
                 if(files.Count > 0)
                 {
@@ -41,7 +39,7 @@ namespace ReRead.Modes
                     foreach (string file in files)
                     {
                         //Read the content of the file
-                        List<string> fileContent = fileHandler.readFile(file);
+                        List<string> fileContent = _fileHandler.ReadFile(file);
 
                         //Read the filename from the selected file path (Select last entry of the string array)
                         string fileName = file.Split('\\')[
@@ -55,7 +53,7 @@ namespace ReRead.Modes
                         else
                         {
                             //Edit the selected file content
-                            List<string> editedFile = fileEditor.edit(fileContent);
+                            List<string> editedFile = _fileEditor.Edit(fileContent);
 
                             //Check new file content
                             if (editedFile.Equals(new List<string>()))
@@ -66,7 +64,7 @@ namespace ReRead.Modes
                             else
                             {
                                 //Save the new file in the 'Output' directory
-                                bool saveStatus = fileHandler.saveFile(fileName, editedFile);
+                                bool saveStatus = _fileHandler.SaveFile(fileName, editedFile);
 
                                 if (saveStatus)
                                 {
@@ -80,7 +78,7 @@ namespace ReRead.Modes
                         }
                     }
 
-                    messagePrinter.allStatus(doneList, failedList);
+                    _messagePrinter.AllStatus(doneList, failedList);
                 }
                 else
                 {

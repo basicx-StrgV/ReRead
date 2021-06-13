@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using BasicxLogger;
-using BasicxLogger.Message;
 
-namespace ReRead.Components.ConsoleWindow
+namespace ReRead
 {
     class MessagePrinter
     {
-        private Logger logger;
+        private readonly FileLogger _logger;
 
-        public MessagePrinter(Logger logger)
+        public MessagePrinter(FileLogger logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
 
-        public void start()
+        public void Start()
         {
             try
             {
@@ -25,11 +24,11 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void done()
+        public void Done()
         {
             try
             {
@@ -40,11 +39,11 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void error()
+        public void Error()
         {
             try
             {
@@ -55,11 +54,11 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void fileError()
+        public void FileError()
         {
             try
             {
@@ -70,11 +69,11 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void saveError()
+        public void SaveError()
         {
             try
             {
@@ -85,11 +84,11 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
 
-        public void allStatus(List<string> doneList, List<string> failedList)
+        public void AllStatus(List<string> doneList, List<string> failedList)
         {
             try
             {
@@ -123,7 +122,7 @@ namespace ReRead.Components.ConsoleWindow
             }
             catch (Exception e)
             {
-                logger.log(Tag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, e.Message);
             }
         }
     }
