@@ -135,7 +135,7 @@ namespace ReRead
             }
             catch(Exception e)
             {
-                _logger.Log(LogTag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, "Default Edit: " + e.Message);
                 return "";
             }
         }
@@ -209,7 +209,7 @@ namespace ReRead
             }
             catch (Exception e)
             {
-                _logger.Log(LogTag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, "Pre Edit: " + e.Message);
                 return "";
             }
         }
@@ -234,12 +234,15 @@ namespace ReRead
                                                 fileContentArray[i + 2].Trim());
 
                         //Skip the next two lines
-                        i += 2;
+                        if((i + 2) < fileContentArray.Length)
+                        {
+                            i += 2;
+                        }
                     }
                     else if (fileContentArray[i].Trim().Equals(""))
                     {
                         //Only add empty line if the line before contains '{'
-                        if(fileContentArray[i - 1].Contains("{"))
+                        if (i > 0 && fileContentArray[i - 1].Contains("{"))
                         {
                             fileContentList.Add(fileContentArray[i]);
                         }
@@ -256,7 +259,7 @@ namespace ReRead
             }
             catch (Exception e)
             {
-                _logger.Log(LogTag.EXCEPTION, e.Message);
+                _logger.Log(LogTag.EXCEPTION, "Post Edit: " + e.Message);
                 return new List<string>();
             }
         }

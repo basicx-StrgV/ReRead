@@ -12,6 +12,7 @@ namespace ReRead
 
         private static FileLogger s_logger = new FileLogger(
             new TxtLogFile(s_dirConfig.ProgramFolderPath + "Logs", "Log"));
+        
 
         private static FileEditor s_fileEditor;
         private static DirectoryHandler s_directoryHandler;
@@ -54,6 +55,8 @@ namespace ReRead
 
         private static void Initialize()
         {
+            s_logger.UseId = false;
+
             //Create objects of default program components
             s_fileEditor = new FileEditor(s_logger);
             s_directoryHandler = new DirectoryHandler(s_dirConfig, s_logger);
