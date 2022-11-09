@@ -1,5 +1,11 @@
 # ReRead
  
+ # ❗ Attention
+This project was my on of my first projects.  
+I mainly did it to learn and test.  
+It will not receive any more updates, including security patches, because I don't use the program and the functionality is pretty limited.
+
+ 
 ## What is ReRead
 ReRead is a small console program that can make code files, that are hard to read (e.g. one line .js files), more readable.
 
