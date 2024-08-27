@@ -1,9 +1,9 @@
 # ReRead
  
  # ❗ Attention
-This project was my on of my first projects.  
+This project was on of my first projects.  
 I mainly did it to learn and test.  
-It will not receive any more updates, including security patches, because I don't use the program and the functionality is pretty limited.
+It will not receive any updates, including security patches, because I don't use the program and the functionality is pretty limited.
 
  
 ## What is ReRead
