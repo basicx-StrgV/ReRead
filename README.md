@@ -1,8 +1,8 @@
 # ReRead
  
  # ❗ Attention
-This project was on of my first projects.  
-I mainly did it to learn and test.  
+**This repository is intended as a reference and archive.**  
+The project was on of my first projects and I mainly did it to play around and learn something.  
 It will not receive any updates, including security patches, because I don't use the program and the functionality is pretty limited.
 
  
